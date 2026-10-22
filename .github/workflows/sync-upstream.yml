@@ -10,6 +10,9 @@ on:
 permissions:
   contents: write
 
+env:
+  UPSTREAM_URL: https://raw.githubusercontent.com/usbog232/clashmetadingyue/main/metafenliu.ini
+
 jobs:
   sync:
     runs-on: ubuntu-latest
