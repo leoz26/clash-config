@@ -12,7 +12,6 @@
 
 产物没变化时不会重写文件，避免 GitHub Actions 产生空提交。
 """
-import datetime as dt
 import pathlib
 import sys
 
@@ -140,15 +139,16 @@ def main():
     rules = parse_overrides(OVR)
     lines, report = apply_rules(lines, rules)
 
-    stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     banner = [
         "; ==========================================================",
-        f"; 本文件自动生成于 {stamp}，不要直接改",
+        "; 本文件自动生成，不要直接改",
         f"; 来源：{UPSTREAM_URL}",
         "; 个性化改动见 overrides.ini；改完在 GitHub 上手动跑一次 Actions",
         "; ==========================================================",
         "",
     ]
+    # 横幅里不放时间戳：内容一样就必须字节一样，Actions 才不会每周空提交一次。
+    # 同步时间看 git log 的提交信息。
     new_text = "\n".join(banner + lines) + "\n"
 
     changed = not OUT.exists() or OUT.read_text(encoding="utf-8") != new_text
